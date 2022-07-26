@@ -5,10 +5,12 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 public class CompraRequest {
 
     @NotNull
+    @Positive
     private Long idUsuario;
 
     @NotEmpty
@@ -22,7 +24,7 @@ public class CompraRequest {
     public CompraRequest() {
     }
 
-    public CompraRequest(@NotNull Long idUsuario, @NotEmpty @Valid List<ProdutoRequest> produtos,
+    public CompraRequest(@NotNull @Positive Long idUsuario, @NotEmpty @Valid List<ProdutoRequest> produtos,
             @NotNull @Valid InformacoesPagamentoRequest pagamento) {
         this.idUsuario = idUsuario;
         this.produtos = produtos;

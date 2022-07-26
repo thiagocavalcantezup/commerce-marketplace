@@ -1,21 +1,24 @@
-package br.com.zup.edu.commercemarketplace.consultausuarios;
+package br.com.zup.edu.commercemarketplace.marketplace.models;
 
 import java.time.LocalDate;
 
-import br.com.zup.edu.commercemarketplace.marketplace.models.Comprador;
+import javax.persistence.Embeddable;
 
-public class UsuarioResponse {
+@Embeddable
+public class Comprador {
 
+    private Long id;
     private String nome;
     private String cpf;
     private String email;
     private String endereco;
     private LocalDate dataNascimento;
 
-    public UsuarioResponse() {
+    public Comprador() {
     }
 
-    public UsuarioResponse(String nome, String cpf, String email, String endereco, LocalDate dataNascimento) {
+    public Comprador(Long id, String nome, String cpf, String email, String endereco, LocalDate dataNascimento) {
+        this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
@@ -23,8 +26,8 @@ public class UsuarioResponse {
         this.dataNascimento = dataNascimento;
     }
 
-    public Comprador toModel(Long id) {
-        return new Comprador(id, nome, cpf, email, endereco, dataNascimento);
+    public Long getId() {
+        return id;
     }
 
     public String getNome() {

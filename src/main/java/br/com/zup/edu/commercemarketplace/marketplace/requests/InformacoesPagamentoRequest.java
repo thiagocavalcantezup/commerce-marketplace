@@ -2,8 +2,10 @@ package br.com.zup.edu.commercemarketplace.marketplace.requests;
 
 import java.time.YearMonth;
 
-import javax.validation.constraints.Digits;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -11,27 +13,32 @@ import br.com.zup.edu.commercemarketplace.marketplace.models.InformacoesPagament
 
 public class InformacoesPagamentoRequest {
 
+    private final static String MSG_NUMERO = "O número do cartão deve ser composto por exatamente 16 dígitos numéricos";
+    private final static String MSG_CODIGO = "O código de segurança do cartão deve ser composto por exatamente 3 dígitos numéricos";
+
     @NotBlank
     private String titular;
 
     @NotBlank
-    @Digits(integer = 16, fraction = 0)
+    @Pattern(regexp = "^\\d{16}$", message = MSG_NUMERO)
     private String numero;
 
-    @NotBlank
+    @NotNull
     @JsonFormat(pattern = "yyyy-MM")
+    @FutureOrPresent
     private YearMonth validoAte;
 
     @NotBlank
-    @Digits(integer = 3, fraction = 0)
-    private Integer codigoSeguranca;
+    @Pattern(regexp = "^\\d{3}$", message = MSG_CODIGO)
+    private String codigoSeguranca;
 
     public InformacoesPagamentoRequest() {
     }
 
     public InformacoesPagamentoRequest(@NotBlank String titular,
-            @NotBlank @Digits(integer = 16, fraction = 0) String numero, @NotBlank YearMonth validoAte,
-            @NotBlank @Digits(integer = 3, fraction = 0) Integer codigoSeguranca) {
+            @NotBlank @Pattern(regexp = "^\\d{16}$", message = MSG_NUMERO) String numero,
+            @NotNull @FutureOrPresent YearMonth validoAte,
+            @NotBlank @Pattern(regexp = "^\\d{3}$", message = MSG_CODIGO) String codigoSeguranca) {
         this.titular = titular;
         this.numero = numero;
         this.validoAte = validoAte;
@@ -54,7 +61,7 @@ public class InformacoesPagamentoRequest {
         return validoAte;
     }
 
-    public Integer getCodigoSeguranca() {
+    public String getCodigoSeguranca() {
         return codigoSeguranca;
     }
 

@@ -3,45 +3,29 @@ package br.com.zup.edu.commercemarketplace.sistemapagamentos;
 import java.math.BigDecimal;
 import java.time.YearMonth;
 
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.FutureOrPresent;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import br.com.zup.edu.commercemarketplace.marketplace.models.InformacoesPagamento;
 
 public class PagamentoRequest {
 
-    @NotBlank
     private String titular;
-
-    @NotBlank
     private String numero;
 
-    @NotBlank
-    @FutureOrPresent
     @JsonFormat(pattern = "yyyy-MM")
     private YearMonth validoAte;
 
-    @NotBlank
-    @Digits(integer = 3, fraction = 0)
-    private Integer codigoSeguranca;
-
-    @NotBlank
-    @Positive
+    private String codigoSeguranca;
     private BigDecimal valorCompra;
 
     public PagamentoRequest() {
     }
 
-    public PagamentoRequest(@NotBlank String titular, @NotBlank String numero,
-            @NotBlank @FutureOrPresent YearMonth validoAte,
-            @NotBlank @Digits(integer = 3, fraction = 0) Integer codigoSeguranca,
-            @NotBlank @Positive BigDecimal valorCompra) {
-        this.titular = titular;
-        this.numero = numero;
-        this.validoAte = validoAte;
-        this.codigoSeguranca = codigoSeguranca;
+    public PagamentoRequest(InformacoesPagamento informacoesPagamento, BigDecimal valorCompra) {
+        this.titular = informacoesPagamento.getTitular();
+        this.numero = informacoesPagamento.getNumero();
+        this.validoAte = informacoesPagamento.getValidoAte();
+        this.codigoSeguranca = informacoesPagamento.getCodigoSeguranca();
         this.valorCompra = valorCompra;
     }
 
@@ -57,7 +41,7 @@ public class PagamentoRequest {
         return validoAte;
     }
 
-    public Integer getCodigoSeguranca() {
+    public String getCodigoSeguranca() {
         return codigoSeguranca;
     }
 
