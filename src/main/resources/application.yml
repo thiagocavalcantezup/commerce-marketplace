@@ -24,7 +24,11 @@ spring:
       bootstrap-servers: 127.0.0.1:9092
       key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-
+      properties:
+        spring:
+          json:
+            type:
+              mapping: 'vendaEvent:br.com.zup.edu.commercemarketplace.marketplace.events.VendaEvent'
 server:
   error:
     include-message: always
