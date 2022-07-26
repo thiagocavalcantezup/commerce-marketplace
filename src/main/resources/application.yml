@@ -18,6 +18,11 @@ spring:
   output:
     ansi:
       enabled: ALWAYS
+  kafka:
+    producer:
+      bootstrap-servers: 127.0.0.1:9092
+      key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 server:
   error:

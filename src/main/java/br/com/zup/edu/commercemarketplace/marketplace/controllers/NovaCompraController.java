@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,10 +25,12 @@ import br.com.zup.edu.commercemarketplace.catalogoprodutos.CatalogoProdutosClien
 import br.com.zup.edu.commercemarketplace.catalogoprodutos.ProdutoResponse;
 import br.com.zup.edu.commercemarketplace.consultausuarios.ConsultaUsuariosClient;
 import br.com.zup.edu.commercemarketplace.consultausuarios.UsuarioResponse;
+import br.com.zup.edu.commercemarketplace.marketplace.events.VendaEvent;
 import br.com.zup.edu.commercemarketplace.marketplace.models.Comprador;
 import br.com.zup.edu.commercemarketplace.marketplace.models.InformacoesPagamento;
 import br.com.zup.edu.commercemarketplace.marketplace.models.Pagamento;
 import br.com.zup.edu.commercemarketplace.marketplace.models.ProdutoQuantidade;
+import br.com.zup.edu.commercemarketplace.marketplace.models.StatusPagamento;
 import br.com.zup.edu.commercemarketplace.marketplace.models.Venda;
 import br.com.zup.edu.commercemarketplace.marketplace.repositories.VendaRepository;
 import br.com.zup.edu.commercemarketplace.marketplace.requests.CompraRequest;
@@ -47,14 +50,16 @@ public class NovaCompraController {
     private final CatalogoProdutosClient catalogoProdutosClient;
     private final SistemaPagamentosClient sistemaPagamentosClient;
     private final VendaRepository vendaRepository;
+    private final KafkaTemplate<String, VendaEvent> kafkaTemplate;
 
     public NovaCompraController(ConsultaUsuariosClient consultaUsuariosClient,
             CatalogoProdutosClient catalogoProdutosClient, SistemaPagamentosClient sistemaPagamentosClient,
-            VendaRepository vendaRepository) {
+            VendaRepository vendaRepository, KafkaTemplate<String, VendaEvent> kafkaTemplate) {
         this.consultaUsuariosClient = consultaUsuariosClient;
         this.catalogoProdutosClient = catalogoProdutosClient;
         this.sistemaPagamentosClient = sistemaPagamentosClient;
         this.vendaRepository = vendaRepository;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @Transactional
@@ -109,6 +114,14 @@ public class NovaCompraController {
         Venda venda = new Venda(idUsuario, produtosQuantidades, pagamento);
         vendaRepository.save(venda);
         URI location = ucb.path("/vendas/{id}").buildAndExpand(venda.getCodigoPedido()).toUri();
+
+        // Evento
+        if (pagamento.getStatus().equals(StatusPagamento.APROVADO)) {
+            VendaEvent vendaEvent = new VendaEvent(venda, comprador, produtosQuantidades);
+
+            LOGGER.info("Novo evento de venda para o código " + vendaEvent.getCodigoPedido());
+            kafkaTemplate.send("vendas", vendaEvent);
+        }
 
         return ResponseEntity.created(location).build();
     }
