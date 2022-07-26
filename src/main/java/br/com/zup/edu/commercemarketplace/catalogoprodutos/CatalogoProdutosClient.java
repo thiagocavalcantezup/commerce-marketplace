@@ -1,5 +1,7 @@
 package br.com.zup.edu.commercemarketplace.catalogoprodutos;
 
+import java.util.Optional;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,6 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface CatalogoProdutosClient {
 
     @GetMapping("/produtos/{id}")
-    public ProdutoResponse consulta(@PathVariable("id") Long id);
+    public Optional<ProdutoResponse> consulta(@PathVariable("id") Long id);
 
 }

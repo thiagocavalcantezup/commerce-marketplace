@@ -1,5 +1,7 @@
 package br.com.zup.edu.commercemarketplace.consultausuarios;
 
+import java.util.Optional;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,6 +10,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface ConsultaUsuariosClient {
 
     @GetMapping("/usuarios/{id}")
-    public UsuarioResponse consulta(@PathVariable("id") Long id);
-
+    public Optional<UsuarioResponse> consulta(@PathVariable("id") Long id);
 }
