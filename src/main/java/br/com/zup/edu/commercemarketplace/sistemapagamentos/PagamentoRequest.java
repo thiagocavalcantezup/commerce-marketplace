@@ -1,7 +1,7 @@
 package br.com.zup.edu.commercemarketplace.sistemapagamentos;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.YearMonth;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.FutureOrPresent;
@@ -21,7 +21,7 @@ public class PagamentoRequest {
     @NotBlank
     @FutureOrPresent
     @JsonFormat(pattern = "yyyy-MM")
-    private LocalDate validoAte;
+    private YearMonth validoAte;
 
     @NotBlank
     @Digits(integer = 3, fraction = 0)
@@ -35,7 +35,7 @@ public class PagamentoRequest {
     }
 
     public PagamentoRequest(@NotBlank String titular, @NotBlank String numero,
-            @NotBlank @FutureOrPresent LocalDate validoAte,
+            @NotBlank @FutureOrPresent YearMonth validoAte,
             @NotBlank @Digits(integer = 3, fraction = 0) Integer codigoSeguranca,
             @NotBlank @Positive BigDecimal valorCompra) {
         this.titular = titular;
@@ -53,7 +53,7 @@ public class PagamentoRequest {
         return numero;
     }
 
-    public LocalDate getValidoAte() {
+    public YearMonth getValidoAte() {
         return validoAte;
     }
 
