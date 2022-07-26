@@ -10,6 +10,7 @@ spring:
       path: /h2-console
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+    open-in-view: false
     show-sql: true
     properties:
       hibernate:
@@ -37,6 +38,8 @@ logging:
     '[br.com.zup.edu.commercemarketplace.catalogoprodutos]': DEBUG
     '[br.com.zup.edu.commercemarketplace.consultausuarios]': DEBUG
     '[br.com.zup.edu.commercemarketplace.sistemapagamentos]': DEBUG
+    '[org.springframework.orm.jpa]': DEBUG
+    '[org.springframework.transaction]': DEBUG
 
 feign:
   client:

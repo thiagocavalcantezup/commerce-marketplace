@@ -41,4 +41,8 @@ public class Pagamento {
         return status;
     }
 
+    public boolean foiAprovado() {
+        return status.equals(StatusPagamento.APROVADO);
+    }
+
 }
