@@ -13,8 +13,8 @@ import br.com.zup.edu.commercemarketplace.marketplace.models.InformacoesPagament
 
 public class InformacoesPagamentoRequest {
 
-    private final static String MSG_NUMERO = "O número do cartão deve ser composto por exatamente 16 dígitos numéricos";
-    private final static String MSG_CODIGO = "O código de segurança do cartão deve ser composto por exatamente 3 dígitos numéricos";
+    private final static String MSG_NUMERO = "deve ser composto por exatamente 16 dígitos numéricos";
+    private final static String MSG_CODIGO = "deve ser composto por exatamente 3 dígitos numéricos";
 
     @NotBlank
     private String titular;
@@ -32,13 +32,12 @@ public class InformacoesPagamentoRequest {
     @Pattern(regexp = "^\\d{3}$", message = MSG_CODIGO)
     private String codigoSeguranca;
 
-    public InformacoesPagamentoRequest() {
-    }
+    public InformacoesPagamentoRequest() {}
 
     public InformacoesPagamentoRequest(@NotBlank String titular,
-            @NotBlank @Pattern(regexp = "^\\d{16}$", message = MSG_NUMERO) String numero,
-            @NotNull @FutureOrPresent YearMonth validoAte,
-            @NotBlank @Pattern(regexp = "^\\d{3}$", message = MSG_CODIGO) String codigoSeguranca) {
+                                       @NotBlank @Pattern(regexp = "^\\d{16}$", message = MSG_NUMERO) String numero,
+                                       @NotNull @FutureOrPresent YearMonth validoAte,
+                                       @NotBlank @Pattern(regexp = "^\\d{3}$", message = MSG_CODIGO) String codigoSeguranca) {
         this.titular = titular;
         this.numero = numero;
         this.validoAte = validoAte;

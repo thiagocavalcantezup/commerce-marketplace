@@ -18,8 +18,7 @@ public class PagamentoRequest {
     private String codigoSeguranca;
     private BigDecimal valorCompra;
 
-    public PagamentoRequest() {
-    }
+    public PagamentoRequest() {}
 
     public PagamentoRequest(InformacoesPagamento informacoesPagamento, BigDecimal valorCompra) {
         this.titular = informacoesPagamento.getTitular();

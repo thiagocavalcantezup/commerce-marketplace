@@ -24,32 +24,33 @@ public class ExceptionHandlers {
     public ResponseEntity<?> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                           WebRequest webRequest) {
         HttpStatus status = BAD_REQUEST;
-        ErroPadronizado erroPadronizado = getErroPadronizado(status, webRequest);
+        ErroPadrao erroPadrao = getErroPadrao(status, webRequest);
 
         List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
-        fieldErrors.forEach(erroPadronizado::adicionar);
+        fieldErrors.forEach(erroPadrao::adicionar);
 
         LOGGER.error("MethodArgumentNotValidException: " + ex.getLocalizedMessage(), ex);
-        return ResponseEntity.status(status).body(erroPadronizado);
+        return ResponseEntity.status(status).body(erroPadrao);
     }
 
+    @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<?> handleResponseStatus(ResponseStatusException ex,
                                                   WebRequest webRequest) {
         HttpStatus status = ex.getStatus();
-        ErroPadronizado erroPadronizado = getErroPadronizado(status, webRequest);
+        ErroPadrao erroPadrao = getErroPadrao(status, webRequest);
 
-        erroPadronizado.adicionar(ex.getReason());
+        erroPadrao.adicionar(ex.getReason());
 
         LOGGER.error("ResponseStatusException: " + ex.getReason(), ex);
-        return ResponseEntity.status(status).body(erroPadronizado);
+        return ResponseEntity.status(status).body(erroPadrao);
     }
 
-    private ErroPadronizado getErroPadronizado(HttpStatus status, WebRequest webRequest) {
+    private ErroPadrao getErroPadrao(HttpStatus status, WebRequest webRequest) {
         Integer codigoHttp = status.value();
         String mensagemHttp = status.getReasonPhrase();
         String caminho = webRequest.getDescription(false).replace("uri=", "");
 
-        return new ErroPadronizado(codigoHttp, mensagemHttp, caminho);
+        return new ErroPadrao(codigoHttp, mensagemHttp, caminho);
     }
 
 }

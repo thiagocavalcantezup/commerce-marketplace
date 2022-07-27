@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.springframework.validation.FieldError;
 
-public class ErroPadronizado {
+public class ErroPadrao {
 
     private Integer codigoHttp;
     private String mensagemHttp;
@@ -14,10 +14,9 @@ public class ErroPadronizado {
     private String caminho;
     private LocalDateTime dataHora;
 
-    public ErroPadronizado() {
-    }
+    public ErroPadrao() {}
 
-    public ErroPadronizado(Integer codigoHttp, String mensagemHttp, String caminho) {
+    public ErroPadrao(Integer codigoHttp, String mensagemHttp, String caminho) {
         this.codigoHttp = codigoHttp;
         this.mensagemHttp = mensagemHttp;
         this.mensagens = new ArrayList<>();

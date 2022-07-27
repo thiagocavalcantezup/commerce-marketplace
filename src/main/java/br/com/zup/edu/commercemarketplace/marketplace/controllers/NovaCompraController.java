@@ -6,7 +6,9 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
@@ -53,9 +55,11 @@ public class NovaCompraController {
     private final TransactionTemplate transactionTemplate;
 
     public NovaCompraController(ConsultaUsuariosClient consultaUsuariosClient,
-            CatalogoProdutosClient catalogoProdutosClient, SistemaPagamentosClient sistemaPagamentosClient,
-            VendaRepository vendaRepository, KafkaTemplate<String, VendaEvent> kafkaTemplate,
-            TransactionTemplate transactionTemplate) {
+                                CatalogoProdutosClient catalogoProdutosClient,
+                                SistemaPagamentosClient sistemaPagamentosClient,
+                                VendaRepository vendaRepository,
+                                KafkaTemplate<String, VendaEvent> kafkaTemplate,
+                                TransactionTemplate transactionTemplate) {
         this.consultaUsuariosClient = consultaUsuariosClient;
         this.catalogoProdutosClient = catalogoProdutosClient;
         this.sistemaPagamentosClient = sistemaPagamentosClient;
@@ -65,34 +69,34 @@ public class NovaCompraController {
     }
 
     @PostMapping("/compras")
-    public ResponseEntity<?> novaCompra(@RequestBody @Valid CompraRequest compraRequest, UriComponentsBuilder ucb) {
+    public ResponseEntity<?> novaCompra(@RequestBody @Valid CompraRequest compraRequest,
+                                        UriComponentsBuilder ucb) {
         // Informações do comprador
         Long idUsuario = compraRequest.getIdUsuario();
-        UsuarioResponse usuarioResponse = consultaUsuariosClient.consulta(idUsuario)
-                .orElseThrow(() -> {
-                    LOGGER.warn("Usuário com id " + idUsuario + " não encontrado");
-                    return new ResponseStatusException(NOT_FOUND, "Usuário não encontrado");
-                });
+        Optional<UsuarioResponse> optionalUsuarioResponse = consultaUsuariosClient.consulta(idUsuario);
+        UsuarioResponse usuarioResponse = optionalUsuarioResponse.orElseThrow(() -> {
+            LOGGER.warn("Usuário com id " + idUsuario + " não encontrado");
+            return new ResponseStatusException(NOT_FOUND, "Usuário não encontrado");
+        });
         Comprador comprador = usuarioResponse.toModel(idUsuario);
 
         // Informações dos produtos
         List<ProdutoRequest> produtoRequests = compraRequest.getProdutos();
-        List<ProdutoQuantidade> produtosQuantidades = produtoRequests.stream()
-                .map(produtoRequest -> {
-                    Long idProduto = produtoRequest.getId();
-                    ProdutoResponse produtoResponse = catalogoProdutosClient.consulta(idProduto)
-                            .orElseThrow(() -> {
-                                LOGGER.warn("Produto com id " + idProduto + " não encontrado");
-                                return new ResponseStatusException(NOT_FOUND, "Produto não encontrado");
-                            });
-                    return produtoResponse.toModel(produtoRequest.getQuantidade());
-                })
-                .collect(Collectors.toList());
+        Stream<ProdutoRequest> produtoRequestsStream = produtoRequests.stream();
+        List<ProdutoQuantidade> produtosQuantidades = produtoRequestsStream.map(produtoRequest -> {
+            Long idProduto = produtoRequest.getId();
+            Optional<ProdutoResponse> optionalProdutoResponse = catalogoProdutosClient.consulta(idProduto);
+            ProdutoResponse produtoResponse = optionalProdutoResponse.orElseThrow(() -> {
+                LOGGER.warn("Produto com id " + idProduto + " não encontrado");
+                return new ResponseStatusException(NOT_FOUND, "Produto não encontrado");
+            });
+            return produtoResponse.toModel(produtoRequest.getQuantidade());
+        }).collect(Collectors.toList());
 
         // Valor total da compra
         BigDecimal valorTotal = produtosQuantidades.stream()
-                .map(ProdutoQuantidade::getTotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                                                   .map(ProdutoQuantidade::getTotal)
+                                                   .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         // Informações de pagamento
         InformacoesPagamentoRequest informacoesPagamentoRequest = compraRequest.getPagamento();
@@ -121,7 +125,7 @@ public class NovaCompraController {
             //
             // A venda é salva independentemente do status do pagamento
             Venda vendaTransaction = new Venda(idUsuario, produtosQuantidades, pagamento);
-            LOGGER.info("Nova venda com código " + vendaTransaction.getCodigoPedido() + " salva com sucesso.");
+            LOGGER.info("Nova venda com código " + vendaTransaction.getCodigoPedido() + " salva com sucesso");
             vendaRepository.save(vendaTransaction);
 
             // Evento
@@ -140,4 +144,5 @@ public class NovaCompraController {
         URI location = ucb.path("/vendas/{id}").buildAndExpand(venda.getCodigoPedido()).toUri();
         return ResponseEntity.created(location).build();
     }
+
 }
