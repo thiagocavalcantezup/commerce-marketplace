@@ -11,10 +11,10 @@ public class ProdutoQuantidade {
     private LocalDateTime criadoEm;
     private Long quantidade;
 
-    public ProdutoQuantidade() {
-    }
+    public ProdutoQuantidade() {}
 
-    public ProdutoQuantidade(Long id, String nome, BigDecimal preco, LocalDateTime criadoEm, Long quantidade) {
+    public ProdutoQuantidade(Long id, String nome, BigDecimal preco, LocalDateTime criadoEm,
+                             Long quantidade) {
         this.id = id;
         this.nome = nome;
         this.preco = preco;

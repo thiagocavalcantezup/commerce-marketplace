@@ -12,8 +12,7 @@ public class ProdutoResponse {
     private BigDecimal preco;
     private LocalDateTime criadoEm;
 
-    public ProdutoResponse() {
-    }
+    public ProdutoResponse() {}
 
     public ProdutoResponse(Long id, String nome, BigDecimal preco, LocalDateTime criadoEm) {
         this.id = id;

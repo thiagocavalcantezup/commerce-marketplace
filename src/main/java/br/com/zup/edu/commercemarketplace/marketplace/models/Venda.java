@@ -39,17 +39,16 @@ public class Venda {
      * @deprecated Construtor de uso exclusivo do Hibernate
      */
     @Deprecated
-    public Venda() {
-    }
+    public Venda() {}
 
     public Venda(@NotNull Long idUsuario, @NotEmpty List<ProdutoQuantidade> produtoQuantidades,
-            @NotNull Pagamento pagamento) {
+                 @NotNull Pagamento pagamento) {
         this.idUsuario = idUsuario;
-        this.itens = produtoQuantidades.stream().map(
-                produtoQuantidade -> {
-                    return new Item(produtoQuantidade.getId(), produtoQuantidade.getQuantidade(),
-                            produtoQuantidade.getPreco());
-                }).collect(Collectors.toList());
+        this.itens = produtoQuantidades.stream().map(produtoQuantidade -> {
+            return new Item(
+                produtoQuantidade.getId(), produtoQuantidade.getQuantidade(), produtoQuantidade.getPreco()
+            );
+        }).collect(Collectors.toList());
         this.pagamento = pagamento;
     }
 

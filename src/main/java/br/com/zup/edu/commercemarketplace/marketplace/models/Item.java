@@ -17,8 +17,7 @@ public class Item {
     @Column(name = "preco_item", nullable = false)
     private BigDecimal preco;
 
-    public Item() {
-    }
+    public Item() {}
 
     public Item(Long id, Long quantidade, BigDecimal preco) {
         this.id = id;

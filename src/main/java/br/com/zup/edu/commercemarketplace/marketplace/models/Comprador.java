@@ -14,10 +14,10 @@ public class Comprador {
     private String endereco;
     private LocalDate dataNascimento;
 
-    public Comprador() {
-    }
+    public Comprador() {}
 
-    public Comprador(Long id, String nome, String cpf, String email, String endereco, LocalDate dataNascimento) {
+    public Comprador(Long id, String nome, String cpf, String email, String endereco,
+                     LocalDate dataNascimento) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;

@@ -9,8 +9,7 @@ public class InformacoesPagamento {
     private YearMonth validoAte;
     private String codigoSeguranca;
 
-    public InformacoesPagamento() {
-    }
+    public InformacoesPagamento() {}
 
     public InformacoesPagamento(String titular, String numero, YearMonth validoAte, String codigoSeguranca) {
         this.titular = titular;
@@ -34,4 +33,5 @@ public class InformacoesPagamento {
     public String getCodigoSeguranca() {
         return codigoSeguranca;
     }
+
 }

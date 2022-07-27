@@ -15,8 +15,7 @@ public class VendaEvent {
     private List<ItemVendaEvent> itens;
     private PagamentoVendaEvent pagamento;
 
-    public VendaEvent() {
-    }
+    public VendaEvent() {}
 
     public VendaEvent(Venda venda, Comprador comprador, List<ProdutoQuantidade> produtosQuantidades) {
         this.codigoPedido = venda.getCodigoPedido();

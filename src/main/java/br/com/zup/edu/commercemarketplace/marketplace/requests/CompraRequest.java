@@ -21,11 +21,10 @@ public class CompraRequest {
     @Valid
     private InformacoesPagamentoRequest pagamento;
 
-    public CompraRequest() {
-    }
+    public CompraRequest() {}
 
     public CompraRequest(@NotNull @Positive Long idUsuario, @NotEmpty @Valid List<ProdutoRequest> produtos,
-            @NotNull @Valid InformacoesPagamentoRequest pagamento) {
+                         @NotNull @Valid InformacoesPagamentoRequest pagamento) {
         this.idUsuario = idUsuario;
         this.produtos = produtos;
         this.pagamento = pagamento;

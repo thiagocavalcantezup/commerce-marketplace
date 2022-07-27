@@ -10,8 +10,7 @@ public class PagamentoResponse {
     private UUID id;
     private StatusPagamentoResponse status;
 
-    public PagamentoResponse() {
-    }
+    public PagamentoResponse() {}
 
     public PagamentoResponse(UUID id, StatusPagamentoResponse status) {
         this.id = id;

@@ -11,4 +11,5 @@ public interface ConsultaUsuariosClient {
 
     @GetMapping("/usuarios/{id}")
     public Optional<UsuarioResponse> consulta(@PathVariable("id") Long id);
+
 }

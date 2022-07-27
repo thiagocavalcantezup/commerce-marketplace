@@ -20,8 +20,7 @@ public class Pagamento {
     @Enumerated(EnumType.STRING)
     private StatusPagamento status;
 
-    public Pagamento() {
-    }
+    public Pagamento() {}
 
     public Pagamento(UUID id, StatusPagamento status) {
         this.id = id;

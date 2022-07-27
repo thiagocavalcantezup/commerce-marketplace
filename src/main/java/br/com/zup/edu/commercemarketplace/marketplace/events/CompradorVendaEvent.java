@@ -16,8 +16,7 @@ public class CompradorVendaEvent {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataNascimento;
 
-    public CompradorVendaEvent() {
-    }
+    public CompradorVendaEvent() {}
 
     public CompradorVendaEvent(Comprador comprador) {
         this.nome = comprador.getNome();

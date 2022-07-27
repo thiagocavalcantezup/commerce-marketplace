@@ -12,8 +12,7 @@ public class UsuarioResponse {
     private String endereco;
     private LocalDate dataNascimento;
 
-    public UsuarioResponse() {
-    }
+    public UsuarioResponse() {}
 
     public UsuarioResponse(String nome, String cpf, String email, String endereco, LocalDate dataNascimento) {
         this.nome = nome;

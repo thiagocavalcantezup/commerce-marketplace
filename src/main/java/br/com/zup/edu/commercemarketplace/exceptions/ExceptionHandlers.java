@@ -34,8 +34,7 @@ public class ExceptionHandlers {
     }
 
     @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<?> handleResponseStatus(ResponseStatusException ex,
-                                                  WebRequest webRequest) {
+    public ResponseEntity<?> handleResponseStatus(ResponseStatusException ex, WebRequest webRequest) {
         HttpStatus status = ex.getStatus();
         ErroPadrao erroPadrao = getErroPadrao(status, webRequest);
 
