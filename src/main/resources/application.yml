@@ -1,13 +1,13 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:mydb
+    url: jdbc:h2:mem:marketplace
     username: sa
-    password: password
+    password:
     driverClassName: org.h2.Driver
   h2:
     console:
       enabled: true
-      path: /h2-console
+      path: /h2-console-marketplace
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     open-in-view: false
